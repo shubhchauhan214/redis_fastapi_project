@@ -21,6 +21,23 @@ def create_student(student: StudentCreate, db: Session=Depends(get_db)):
         "student_id": new_student.id
     }
 
+@app.get("/students")
+def get_students(db: Session = Depends(get_db)):
+
+    students = db.query(models.Student).all()
+
+    result = [
+        {
+            "id": s.id,
+            "name": s.name,
+            "course": s.course,
+            "city": s.city
+        }
+        for s in students
+    ]
+
+    return result
+
 @app.get("/")
 def home():
     return {"message": "Fastapi working successfully."}
